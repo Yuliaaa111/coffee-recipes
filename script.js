@@ -1,3 +1,6 @@
+import { recipesData, recipeDetails, allRecipes } from "./recipesData.js";
+import { categoryInfo } from "./categoryInfo.js";
+
 const container = document.getElementById('categories');
 
 /* ---------------------------
@@ -12,151 +15,6 @@ const state = {
 };
 
 /* ---------------------------
-   DATA
-----------------------------*/
-
-const recipesData = {
-  classic: {
-    title: "Классические кофе",
-    img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80",
-    recipes: ["Эспрессо", "Латте", "Капучино", "Американо"]
-  },
-  world: {
-    title: "Кофе мира",
-    img: "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=800&q=80",
-    recipes: ["Турецкий кофе", "Флэт уайт", "Ристретто"]
-  },
-  cold: {
-    title: "Холодные кофе",
-    img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80",
-    recipes: ["Айс латте", "Фраппе", "Кофе со льдом"]
-  },
-  author: {
-    title: "Авторские рецепты",
-    img: "https://images.unsplash.com/photo-1498804103079-a6351b050096?auto=format&fit=crop&w=800&q=80",
-    recipes: ["Ванильный раф", "Карамельный кофе"]
-  },
-  useful: {
-    title: "Полезные кофе",
-    img: "https://images.unsplash.com/photo-1512568400610-62da28bc8a13?auto=format&fit=crop&w=800&q=80",
-    recipes: ["Без сахара", "Протеиновый кофе"]
-  }
-};
-
-
-const recipeDetails = {
-  "Эспрессо": {
-    title: "Эспрессо",
-    desc: "Классический концентрированный кофейный напиток (30 мл)",
-
-    history: "Эспрессо появился в Италии в начале XX века. Его название означает «выжатый под давлением». Он стал основой большинства кофейных напитков.",
-
-    ingredients: [
-      "7–9 г свежемолотого кофе",
-      "30 мл воды",
-      "Кофемашина"
-    ],
-
-    steps: [
-      "Разогрей кофемашину",
-      "Засыпь и утрамбуй кофе",
-      "Запусти пролив воды",
-      "Готовь 25–30 секунд"
-    ],
-
-    tips: [
-      "Используй свежемолотый кофе",
-      "Следи за временем экстракции",
-      "Не перегревай воду"
-    ]
-  },
-
-  "Латте": {
-    title: "Латте",
-    desc: "Мягкий кофейный напиток с большим количеством молока",
-
-    history: "Латте пришёл из Италии, но стал популярным в США. Название означает «молоко», так как основной объём напитка — это именно оно.",
-
-    ingredients: [
-      "1 порция эспрессо",
-      "150–200 мл молока",
-      "Молочная пенка"
-    ],
-
-    steps: [
-      "Приготовь эспрессо",
-      "Подогрей молоко до ~60°C",
-      "Взбей лёгкую пенку",
-      "Влей молоко в кофе"
-    ],
-
-    tips: [
-      "Не перегревай молоко",
-      "Используй цельное молоко для лучшей текстуры",
-      "Латте хорошо подходит для латте-арта"
-    ]
-  },
-
-  "Капучино": {
-    title: "Капучино",
-    desc: "Кофе с равным соотношением эспрессо, молока и пены",
-
-    history: "Капучино назван в честь монахов-капуцинов из-за цвета напитка. Стал популярным в Европе как утренний кофе.",
-
-    ingredients: [
-      "1 порция эспрессо",
-      "100 мл молока",
-      "Густая молочная пенка"
-    ],
-
-    steps: [
-      "Сделай эспрессо",
-      "Подогрей молоко",
-      "Взбей плотную пену",
-      "Смешай в пропорции 1:1:1"
-    ],
-
-    tips: [
-      "Пена должна быть плотной и мелкой",
-      "Не делай слишком горячий напиток",
-      "Лучше пить сразу после приготовления"
-    ]
-  },
-
-  "Американо": {
-    title: "Американо",
-    desc: "Эспрессо, разбавленный горячей водой",
-
-    history: "Американо появился во время Второй мировой войны, когда американские солдаты разбавляли эспрессо водой, чтобы сделать его похожим на фильтр-кофе.",
-
-    ingredients: [
-      "1 порция эспрессо",
-      "100–150 мл горячей воды"
-    ],
-
-    steps: [
-      "Приготовь эспрессо",
-      "Налей горячую воду в чашку",
-      "Добавь эспрессо в воду"
-    ],
-
-    tips: [
-      "Сначала вода, потом кофе — так сохраняется вкус",
-      "Можно регулировать крепость количеством воды",
-      "Используй чистую фильтрованную воду"
-    ]
-  }
-};
-
-const allRecipes = Object.entries(recipesData).flatMap(([key, cat]) =>
-  cat.recipes.map(recipe => ({
-    name: recipe,
-    category: cat.title,
-    key
-  }))
-);
-
-/* ---------------------------
    ROUTER HELPERS
 ----------------------------*/
 
@@ -165,17 +23,15 @@ function getHashFromState(s) {
     return s.search ? `#home?q=${encodeURIComponent(s.search)}` : "#home";
   }
   if (s.page === "category") return `#cat-${s.category}`;
-
   if (s.page === "recipe") {
-    return `#rec-${encodeURIComponent(s.recipe)}`; // 👈 ВАЖНО
+    return `#rec-${encodeURIComponent(s.recipe)}`;
   }
-
   return "#home";
 }
+
 function parseHash() {
   const hash = location.hash || "#home";
-
-  const [path, query] = hash.split("?");
+  const [path, query] = hash.split("?"); //путь запрос.  делим на дву пути
 
   let search = "";
   if (query) {
@@ -187,7 +43,7 @@ function parseHash() {
     return { page: "home", category: null, recipe: null, search };
   }
 
-  if (path.startsWith("#cat-")) {
+  if (path.startsWith("#cat-")) { //начинается с
     return {
       page: "category",
       category: path.replace("#cat-", ""),
@@ -200,7 +56,7 @@ if (path.startsWith("#rec-")) {
   return {
     page: "recipe",
     category: null,
-    recipe: decodeURIComponent(path.replace("#rec-", "")), // 👈 ВАЖНО
+    recipe: decodeURIComponent(path.replace("#rec-", "")),
     search
   };
 }
@@ -216,13 +72,13 @@ function clearSearchUI() {
   state.search = "";
 
   const input = document.getElementById("searchInput");
-  const dropdown = document.getElementById("searchDropdown");
+  const dropdown = document.getElementById("searchDropdown"); //поиск выпадающий список
 
   if (input) input.value = "";
 
   if (dropdown) {
     dropdown.innerHTML = "";
-    dropdown.classList.remove("active");
+    dropdown.classList.remove("active"); //удалить убрать
   }
 }
 
@@ -230,13 +86,19 @@ function clearSearchUI() {
    NAVIGATE
 ----------------------------*/
 
-function navigate(next) {
-  Object.assign(state, next);
+function navigate(next) { //переход между главная рецепты категории
+  Object.assign(state, next); //скопи данные одного в ддр(сост-е прил/куда хотм перейти)
 
   // 👉 очищаем поиск при переходе в рецепт
   if (state.page === "recipe") {
     clearSearchUI();
   }
+
+  if (state.page === "home") {
+    state.search = "";
+    clearSearchUI();
+  }
+
 
   location.hash = getHashFromState(state);
   render();
@@ -256,10 +118,14 @@ function render() {
    HOME
 ----------------------------*/
 
-function renderHome() {
+function renderHome() { //перерисовка
   container.innerHTML = `
     <div class="top-bar">
       <h2>Категории</h2>
+
+      <button id="coffeeOfDayBtn" class="coffee-day-btn">
+        ☕ Кофе дня
+      </button>
 
       <div class="search-box" id="searchBox">
         <span class="search-icon">🔍</span>
@@ -286,19 +152,20 @@ function renderHome() {
       `).join('')}
     </div>
   `;
+
 }
 
 /* ---------------------------
    SEARCH RESULTS
 ----------------------------*/
 
-function renderSearchResults() {
-  if (!state.search.trim()) return "";
+function renderSearchResults() { //отрисовать рез-ты поиска
+  if (!state.search.trim()) return ""; //поиск пуст(только пробелы)-ничего не показ
 
-  const filtered = allRecipes.filter(r =>
+  const filtered = allRecipes.filter(r => //создаём список только тех рецептов, которые подходят под поиск
     r.name.toLowerCase().includes(state.search.toLowerCase())
-  );
-
+  ); //перевести в нижний регистр (чтобы не было разницы Капучино / капучино)
+        //если название рецепта содержит текст поиска — оставить его
   return filtered.length
     ? filtered.map(r => `
         <div class="search-item" data-recipe="${r.name}">
@@ -314,10 +181,19 @@ function renderSearchResults() {
 
 function renderCategory() {
   const data = recipesData[state.category];
+  const info = categoryInfo[state.category];
+
   if (!data) return navigate({ page: "home" });
 
   container.innerHTML = `
+  <div class="category-hero">
     <h1 class="page-title">${data.title}</h1>
+
+    ${info ? `
+        <p class="category-desc">${info.description}</p>
+        <div class="category-details">${info.details}</div>
+      ` : ""}
+    </div>
 
     <div class="recipe-list">
       ${data.recipes.map(item => `
@@ -381,18 +257,18 @@ function renderRecipe() {
    DEBOUNCE URL UPDATE
 ----------------------------*/
 
-function debounce(fn, delay = 250) {
-  let t;
-  return (...args) => {
+function debounce(fn, delay = 250) { //создаём функцию, которая не даёт вызывать другую функцию слишком часто
+  let t; //таймер
+  return (...args) => { //все переданные параметры
     clearTimeout(t);
-    t = setTimeout(() => fn(...args), delay);
+    t = setTimeout(() => fn(...args), delay); //задержка
   };
 }
 
-const updateURL = debounce(() => {
-  location.hash = getHashFromState(state);
+const updateURL = debounce(() => { //
+  const newHash = getHashFromState(state);
+  history.replaceState(null, "", newHash);
 }, 300);
-
 /* ---------------------------
    EVENTS
 ----------------------------*/
@@ -419,6 +295,19 @@ function initEvents() {
       return;
     }
 
+    const coffeeBtn = e.target.closest('#coffeeOfDayBtn');
+  if (coffeeBtn) {
+    const randomIndex = Math.floor(Math.random() * allRecipes.length);
+    const randomRecipe = allRecipes[randomIndex];
+
+    navigate({
+      page: "recipe",
+      recipe: randomRecipe.name
+    });
+
+    return;
+  }
+
     const box = document.getElementById("searchBox");
     const dropdown = document.getElementById("searchDropdown");
 
@@ -441,6 +330,8 @@ function initEvents() {
     updateURL();
   });
 
+
+
   window.addEventListener('hashchange', () => {
     Object.assign(state, parseHash());
 
@@ -449,19 +340,25 @@ function initEvents() {
       clearSearchUI();
     }
 
+    if (state.page === "home") {
+    state.search = "";
+    clearSearchUI();
+  }
+
     render();
   });
+
 }
 
 /* ---------------------------
    INIT
 ----------------------------*/
 
-function init() {
+function init() { //инициализация
   initEvents();
 
   Object.assign(state, parseHash());
   render();
 }
 
-init();
+init(); //функция, которая запускает всё приложение
